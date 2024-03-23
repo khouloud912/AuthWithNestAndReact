@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import axios from "axios";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
+import  { signIn, signUp } from "../utils/api/api";
 
 const Auth = () => {
     const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
@@ -19,19 +18,10 @@ const Auth = () => {
         e.preventDefault();
         try {
             if (authMode === "signin") {
-                const response = await api.post("/login", {
-                    fullName,
-                    password,
-                });
-                localStorage.setItem('accessToken', response.data.access_token);
+                await signIn(fullName, password);
                 navigate('/profile');
             } else {
-                const body = {
-                    fullName,
-                    password,
-                    role,
-                }
-                const response = await axios.post("/register", body);
+                await signUp(fullName, password, role);
             }
         } catch (error) {
             setError("An error occurred. Please try again.");

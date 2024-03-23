@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import api from '../api';
-
+import { useState, useEffect } from 'react';
+import { fetchUser } from '../utils/api/api';
 
 interface User {
     username: string;
@@ -10,20 +8,16 @@ interface User {
 const Profile = () => {
     const [user, setUser] = useState<User | null>(null);
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchData = async () => {
             try {
-                const response = await api.get('/profile', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
-                setUser(response.data);
+                const userData = await fetchUser();
+                setUser(userData);
             } catch (error) {
                 console.error(error);
             }
         };
 
-        fetchUser();
+        fetchData();
     }, []);
 
     return (
